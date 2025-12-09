@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Application</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body,
+        html {
+            height: 100%;
+        }
+
+        .hero {
+            background-image: url('https://source.unsplash.com/1600x900/?technology');
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            /* dark overlay */
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .hero button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .hero button:hover {
+            background-color: rgba(0, 0, 0, 1);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            .hero button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .hero {
+                flex-direction: column;
+            }
+        }
+
+        .frame {
+            position: relative;
+            width: 300px;
+            z-index: 2;
+            /* Size of the entire frame */
+            height: 280px;
+        }
+
+        .bg-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* Image keeps aspect ratio */
+            display: block;
+        }
+
+        /* 🔑 Video Wrapper to crop & round corners */
+        .video-wrapper {
+            position: absolute;
+            /* Position over the image */
+            top: 45%;
+            /* Center vertically */
+            left: 50%;
+            /* Center horizontally */
+            transform: translate(-50%, -50%);
+            /* Perfect centering */
+
+            width: 90%;
+            /* Adjust size relative to image */
+            height: 60%;
+
+            border-radius: 20px;
+            /* Rounded corners */
+            overflow: hidden;
+            /* Crop video outside the box */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            /* Optional shadow */
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Crop & fill the wrapper */
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero">
+        <div class="overlay"></div>
+        <div class="frame">
+            <img src="monitor.png" alt="Background" class="bg-img">
+
+            <!-- Video sits on top of the image -->
+            <div class="video-wrapper">
+                <video autoplay loop muted playsinline disablePictureInPicture>
+                    <source src="video.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+        <div class="hero-content">
+            <h1>Welcome to Monitor Application</h1>
+            <p>Monitor devices, view real-time stats, and stay ahead with alerts.</p>
+            <button onclick="goToDashboard()">Get Started</button>
+        </div>
+    </div>
+
+    <script>
+        function goToDashboard() {
+            // Replace with your actual route
+            window.location.href = '/dashboard.html';
+        }
+    </script>
+</body>
+
+</html>

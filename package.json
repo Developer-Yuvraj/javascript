@@ -1,0 +1,33 @@
+{
+  "type": "module",
+  "name": "my-iot-monitor",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@google-cloud/vision": "^5.3.4",
+    "@hapi/boom": "^10.0.1",
+    "@whiskeysockets/baileys": "^6.7.18",
+    "axios": "^1.12.2",
+    "cors": "^2.8.5",
+    "csv-parser": "^3.2.0",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "fs": "^0.0.1-security",
+    "lodash": "^4.17.21",
+    "mongodb": "^6.18.0",
+    "mqtt": "^5.14.0",
+    "multer": "^2.0.2",
+    "node-cron": "^4.2.1",
+    "path": "^0.12.7",
+    "pino": "^9.7.0",
+    "qrcode-terminal": "^0.12.0",
+    "redis": "^5.10.0"
+  }
+}

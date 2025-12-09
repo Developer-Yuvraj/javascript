@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Graph</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body,
+        html {
+            height: 100%;
+        }
+
+        .hero {
+            background-image: url('https://source.unsplash.com/1600x900/?technology');
+            /* change to your image */
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            /* dark overlay */
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .hero button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .hero button:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            .hero button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon"></script>
+</head>
+
+<body>
+    <div class="center-container">
+        <label for="devices">Choose a device:</label>
+        <select id="devices" name="devices">
+            <option value="">-- Select a device --</option>
+            <option value="ceramic">Device-Ceramic</option>
+            <option value="officeGateway">Device-OfficeGateway</option>
+            <option value="device-ehcc">Device-Ehcc</option>
+            <option value="device-jnu">Device-Jnu</option>
+            <option value="velvutech">Device-Velvutech</option>
+            <option value="beyoungkota">Device-Beyoungkota</option>
+        </select>
+        <input type="datetime-local" id="startTime">
+        <input type="datetime-local" id="endTime">
+        <button type="button" onclick="loadData()">Submit</button>
+    </div>
+    <canvas id="deviceChart" width="800" height="400"></canvas>
+
+    <script>
+
+        async function fetchData(deviceId, start, end) {
+            const res = await fetch(`/api/readings/${deviceId}?start=${encodeURIComponent(start + "+05:30")}&end=${encodeURIComponent(end + "+05:30")}`);
+            if (!res.ok) throw new Error("Failed to fetch readings");
+            const data = await res.json();
+            return data;
+        }
+
+         
+
+        function renderChart(data) {
+            const ctx = document.getElementById('deviceChart').getContext('2d');
+
+            // function getRttData(contactName) {
+            //     return data.map(d => {
+            //         const value = d.sipContactAvailability?.[contactName] || "";
+            //         const match = String(value).match(/RTT:\s*([\d.]+)ms/i);
+            //         return match ? parseFloat(match[1]) : null;
+            //     });
+            // }
+
+            // const cpuData = data.map(d => parseFloat(String(d.cpuUsage).replace("%", '')));
+            // const ramData = data.map(d => parseFloat(String(d.ramUsage).replace("%", '')));
+            // const timestamps = data.map(d => d.timestamp);
+            // const sequence = data.map(d => Number(d.sequence));
+            // const airtelRtt = getRttData("airtel");
+            // const samwadRtt = getRttData("samwad");
+            // const jioSipRtt = getRttData("jiosip-aor");
+            // const bsnlRtt = getRttData("bsnl");
+            // const cloud8002Rtt = getRttData("cloud8002");
+            // const samwadprodRtt = getRttData("samwadprod");
+            // const matrixRtt = getRttData("matrix");
+            // const matrixJnuRtt = getRttData("matrix-jnu");
+
+            // const allTimestamps = [];
+            // const allAirtelRtt = [];
+            // for (let i = 0; i < sequence.length; i++) {
+            //     allTimestamps.push(timestamps[i]);
+            //     allAirtelRtt.push(airtelRtt[i]);
+            //     if (i < sequence.length - 1) {
+            //         const gap =
+            //             sequence[i + 1] - sequence[i] < 0
+            //                 ? 99999 - sequence[i] + sequence[i + 1] - 1
+            //                 : sequence[i + 1] - sequence[i] - 1;
+            //         if (gap > 0) {
+            //             allTimestamps.push(null);
+            //             allAirtelRtt.push(null);
+            //         }
+            //     } 
+            // }
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.allTimestamps,
+                    datasets: [
+                        // { label: 'Samwad RTT in ms', data: samwadRtt, borderColor: 'black', fill: false },
+                        { label: 'Airtel RTT in ms', data: data.allAirtelRtt, borderColor: 'brown', fill: false },
+                        // { label: 'JioSip RTT in ms', data: jioSipRtt, borderColor: 'black', fill: false },
+                        // { label: 'Bsnl RTT in ms', data: bsnlRtt, borderColor: 'brown', fill: false },
+                        // { label: 'Matrix RTT in ms', data: matrixRtt, borderColor: 'black', fill: false },
+                        // { label: 'Matrix JNU RTT in ms', data: matrixJnuRtt, borderColor: 'brown', fill: false },
+                        // { label: 'Samwadprod RTT in ms', data: samwadprodRtt, borderColor: 'black', fill: false },
+                        // { label: 'Cloud8002 RTT in ms', data: cloud8002Rtt, borderColor: 'brown', fill: false }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'minute',
+                                displayFormats: { minute: 'HH:mm' }, // 24-hour format
+                                tooltipFormat: 'HH:mm'               // tooltip in local time
+                            },
+                            adapters: {
+                                date: {
+                                    zone: 'Asia/Kolkata'  // ✅ set local timezone here
+                                }
+                            },
+                            ticks: {
+                                autoSkip: true,     // ✅ skip crowded labels
+                                maxRotation: 0,     // ✅ keep text horizontal (optional)
+                                minRotation: 0
+                            }
+                        },
+                        //  x: { type: 'time', time: { unit: 'minute' } },
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function getSelectedValue() {
+            const dropdown = document.getElementById("devices");
+            return value = dropdown.value;
+        }
+
+        async function loadData() {
+            const start = document.getElementById("startTime").value;
+            const end = document.getElementById("endTime").value;
+            const value = getSelectedValue();
+            fetchData(value, start, end).then(renderChart);
+            // const xValues = data.allTimestamps;
+            // const yValues = data.allAirtelRtt;
+            // console.log(xValues);
+            // console.log(yValues);
+            // const trace = {
+            //     x: xValues,
+            //     y: yValues,
+            //     mode: 'lines+markers',
+            //     name: 'With Gap',
+            //     line: { color: 'blue', width: 3 }
+            // };
+
+            // const layout = {
+            //     title: 'Line with Gaps',
+            //     xaxis: { title: 'X' },
+            //     yaxis: { title: 'Y' }
+            // };
+            // Plotly.newPlot('chart', [trace], layout, { responsive: true });
+        }
+    </script>
+</body>
+
+</html>
